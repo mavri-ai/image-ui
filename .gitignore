@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.DS_Store
+playwright-report/
+test-results/
+.env*
+!.env.example
+*.tsbuildinfo
+/public/r/
+/public/registry.json
+/public/LICENSE
