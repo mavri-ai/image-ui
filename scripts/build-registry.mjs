@@ -1,18 +1,10 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { catalog } from '../src/catalog.ts'
 
 const root = path.resolve(import.meta.dirname, '..')
 const componentDirectory = path.join(root, 'src/components/image-ui')
-const names = [
-  'generation-card',
-  'reference-input',
-  'prompt-composer',
-  'model-picker',
-  'generation-settings',
-  'output-gallery',
-  'version-history',
-  'generative-canvas',
-]
+const names = catalog.map((item) => item.id)
 const output = path.join(root, 'public/r')
 await mkdir(output, { recursive: true })
 
@@ -53,8 +45,9 @@ for (const name of names) {
     $schema: 'https://ui.shadcn.com/schema/registry-item.json',
     name,
     type: 'registry:ui',
-    title: name.replaceAll('-', ' ').replace(/^./, (letter) => letter.toUpperCase()),
-    description: `Composable ${name.replaceAll('-', ' ')} for visual generation interfaces.`,
+    title: catalog.find((item) => item.id === name).title,
+    description: `${catalog.find((item) => item.id === name).description} Controlled React UI for image-generation workflows; connect your own provider.`,
+    docs: `Read https://mavri.ai/image-ui/components/${name}.md for usage, props, callbacks, and limitations. Install includes local dependencies, shared types, helpers, and CSS.`,
     dependencies: [...dependencies].sort(),
     files: [...files].map(([filename, originalContent]) => ({
       path: `src/components/image-ui/${filename}`,

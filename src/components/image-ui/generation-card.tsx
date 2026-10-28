@@ -29,6 +29,8 @@ export interface GenerationCardProps {
   onRetry?: () => void
   onCancel?: () => void
   onOpen?: () => void
+  loading?: 'eager' | 'lazy'
+  fetchPriority?: 'high' | 'low' | 'auto'
   className?: string
 }
 
@@ -53,6 +55,8 @@ export function GenerationCard({
   onRetry,
   onCancel,
   onOpen,
+  loading = 'lazy',
+  fetchPriority = 'auto',
   className = '',
 }: GenerationCardProps) {
   const reducedMotion = useReducedMotion()
@@ -77,7 +81,13 @@ export function GenerationCard({
               exit={{ opacity: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.15 }}
             >
-              <img src={src} alt={alt} />
+              <img
+                loading={loading}
+                fetchPriority={fetchPriority}
+                decoding="async"
+                src={src}
+                alt={alt}
+              />
               {onOpen ? (
                 <IconButton label="Expand image" className="iu-expand-image" onClick={onOpen}>
                   <ArrowUpRight size={16} />

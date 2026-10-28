@@ -4,13 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm run registry:build",
+    "predev": "npm run api:build && npm run registry:build && npm run images:build",
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && node scripts/build-registry.mjs && vite build",
+    "build": "npm run api:build && tsc -b && npm run registry:build && npm run images:build && vite build && node scripts/build-site.mjs && npm run site:check",
     "preview": "vite preview --host 127.0.0.1",
     "test": "playwright test",
     "registry:build": "node scripts/build-registry.mjs",
-    "format:check": "prettier --check src scripts tests index.html package.json tsconfig.json vite.config.ts playwright.config.ts README.md"
+    "format:check": "prettier --check src scripts tests index.html package.json tsconfig.json vite.config.ts playwright.config.ts README.md",
+    "images:build": "node scripts/build-images.mjs",
+    "test:production": "npm run build && IMAGE_UI_TEST_PRODUCTION=1 playwright test",
+    "api:build": "node scripts/build-api.mjs",
+    "site:check": "node scripts/verify-site.mjs",
+    "perf": "node scripts/measure-performance.mjs",
+    "test:validation": "node --test tests/site-validation.test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist-mono": "^5.3.0",
@@ -29,8 +35,13 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "chrome-launcher": "^1.2.2",
+    "lighthouse": "^13.6.0",
+    "linkedom": "^0.18.14",
     "prettier": "^3.9.10",
+    "sharp": "^0.35.5",
     "typescript": "^7.0.2",
+    "typescript-api": "npm:typescript@^6.0.2",
     "vite": "^8.3.5"
   }
 }

@@ -758,3 +758,520 @@ main {
     transform: translate(-50%, calc(-50% + 4px)) scale(0.99);
   }
 }
+
+/* Documentation shares the showcase palette and compact component language. */
+.sidebar {
+  overflow-y: auto;
+  padding-top: 42px;
+}
+.sidebar h1,
+.sidebar-tagline {
+  font-size: 21px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  font-weight: 600;
+  margin: 30px 0 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px dashed var(--iu-border);
+}
+.nav-doc-label {
+  margin-top: 22px;
+}
+.sidebar-bottom {
+  padding-top: 30px;
+}
+.component-nav > a {
+  padding-block: 5px;
+}
+.showcase-intro {
+  padding: 28px 32px 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--iu-secondary);
+}
+.showcase-intro p {
+  margin: 0 0 14px;
+}
+.showcase-intro > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.showcase-intro a,
+.component-doc-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--iu-text);
+}
+.component-doc-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 11px;
+}
+.component-doc-link span {
+  color: var(--iu-muted);
+}
+.preview-placeholder {
+  min-height: 264px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: var(--iu-secondary);
+  font-size: 12px;
+  text-align: center;
+}
+.preview-placeholder p,
+.preview-placeholder noscript {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--iu-muted);
+}
+.deferred-preview--canvas .preview-placeholder {
+  min-height: 430px;
+}
+.site-frame--docs {
+  width: min(1120px, 100%);
+}
+.documentation {
+  padding: 30px 40px 0;
+  min-width: 0;
+}
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  color: var(--iu-muted);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+.breadcrumbs a:hover {
+  color: var(--iu-text);
+}
+.doc-heading {
+  padding: 0 0 30px;
+  border-bottom: 1px dashed var(--iu-border);
+}
+.doc-eyebrow {
+  font: 10px/1.6 var(--iu-mono);
+  color: var(--iu-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.doc-heading h1 {
+  margin: 12px 0;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 550;
+  line-height: 1.2;
+  letter-spacing: -1.1px;
+}
+.doc-heading > p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--iu-secondary);
+  max-width: 65ch;
+}
+.doc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 20px;
+}
+.doc-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  min-height: 31px;
+  border: 1px solid var(--iu-border);
+  border-radius: 7px;
+  padding: 7px 10px;
+  background: var(--iu-surface);
+  color: var(--iu-text);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.doc-button:hover {
+  background: var(--iu-surface-hover);
+}
+.copy-control {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+.copy-feedback {
+  max-width: 250px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--iu-secondary);
+}
+.copy-feedback:empty {
+  display: none;
+}
+.doc-section {
+  padding-block: 28px;
+  border-bottom: 1px dashed var(--iu-border);
+  scroll-margin-top: 30px;
+}
+.doc-section h2 {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 550;
+  letter-spacing: -0.35px;
+  margin: 0 0 14px;
+}
+.doc-section > p,
+.doc-note {
+  font-size: 12px;
+  line-height: 1.95;
+  color: var(--iu-secondary);
+}
+.doc-section > p:last-child {
+  margin-bottom: 0;
+}
+.doc-section a:not(.doc-button),
+.doc-note a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.doc-note a {
+  display: inline;
+}
+.doc-note a svg {
+  vertical-align: middle;
+}
+.doc-note code {
+  font: 10px var(--iu-mono);
+}
+.documentation .component-section {
+  padding: 26px 0;
+}
+.doc-code {
+  min-width: 0;
+  margin-top: 16px;
+  border: 1px solid var(--iu-border);
+  background: var(--iu-canvas);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.doc-code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--iu-border);
+}
+.doc-code-header > span {
+  padding-top: 7px;
+  color: var(--iu-muted);
+  font: 10px var(--iu-mono);
+}
+.doc-code-header .doc-button {
+  min-height: 26px;
+  padding: 5px 7px;
+  font-size: 10px;
+  background: transparent;
+}
+.doc-code pre {
+  max-height: 490px;
+  margin: 0;
+  padding: 18px;
+  overflow: auto;
+  color: var(--iu-secondary);
+  font: 11px/1.85 var(--iu-mono);
+  tab-size: 2;
+}
+.props-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--iu-border);
+  border-radius: 9px;
+}
+.props-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.props-table th,
+.props-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--iu-border);
+  vertical-align: top;
+  min-width: 120px;
+}
+.props-table thead {
+  background: var(--iu-field);
+}
+.props-table th {
+  font-weight: 500;
+}
+.props-table td {
+  color: var(--iu-secondary);
+}
+.props-table tr:last-child > * {
+  border-bottom: 0;
+}
+.props-table code {
+  font: 10px/1.8 var(--iu-mono);
+  overflow-wrap: anywhere;
+}
+.props-table small {
+  display: block;
+  margin-top: 8px;
+  color: var(--iu-muted);
+}
+.related-components,
+.doc-resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.related-components a,
+.doc-resource-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--iu-border);
+  border-radius: 7px;
+  font-size: 11px;
+  text-decoration: none !important;
+}
+.related-components a:hover,
+.doc-resource-links a:hover {
+  background: var(--iu-field);
+}
+.doc-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 24px;
+  color: var(--iu-muted);
+  font-size: 10px;
+}
+.doc-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.component-index > a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 0;
+  border-bottom: 1px dashed var(--iu-border);
+}
+.component-index > a > div {
+  flex: 1;
+  min-width: 0;
+}
+.component-index h2 {
+  font-size: 14px;
+  font-weight: 550;
+  margin: 0 0 6px;
+}
+.component-index p {
+  color: var(--iu-secondary);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 0;
+}
+.component-index a:hover h2 {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.workflow-preview {
+  padding: 20px;
+  border: 1px solid var(--iu-border);
+  border-radius: 12px;
+  background: var(--iu-canvas);
+}
+.workflow-demo {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  min-width: 0;
+}
+.workflow-demo > .iu-generation-card {
+  align-self: center;
+  max-width: 100%;
+}
+.workflow-demo > .iu-output-gallery {
+  width: 100%;
+}
+.workflow-demo > p {
+  margin: 0;
+  color: var(--iu-secondary);
+  font-size: 11px;
+  line-height: 1.8;
+}
+@media (max-width: 720px) {
+  .documentation {
+    padding: 24px 18px 0;
+  }
+  .breadcrumbs {
+    margin-bottom: 22px;
+    font-size: 10px;
+  }
+  .showcase-intro {
+    padding: 24px 18px 0;
+  }
+  .doc-heading h1 {
+    letter-spacing: -0.7px;
+  }
+  .doc-section {
+    padding-block: 24px;
+  }
+  .doc-code pre {
+    font-size: 10px;
+    padding: 14px;
+  }
+  .workflow-preview {
+    padding: 13px;
+  }
+}
+
+.activate-preview {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 6;
+}
+.activate-preview[hidden],
+[data-live-activate][hidden] {
+  display: none;
+}
+.preview-caption {
+  color: var(--iu-muted);
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 12px 0 0;
+}
+.static-canvas {
+  min-height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  background-image: radial-gradient(var(--iu-dot) 1px, transparent 1px);
+  background-size: 18px 18px;
+  overflow: hidden;
+}
+.static-canvas-node {
+  width: 29%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--iu-border);
+  border-radius: 9px;
+  background: var(--iu-surface);
+  font-size: 11px;
+}
+.static-canvas-node > span {
+  display: block;
+  padding-bottom: 10px;
+}
+.static-canvas-node img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+}
+.static-canvas-node p {
+  color: var(--iu-secondary);
+  line-height: 1.8;
+}
+.static-canvas-node small {
+  color: var(--iu-muted);
+  font-size: 9px;
+}
+.doc-mobile-dialog {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  width: min(310px, 90vw);
+  height: 100%;
+  max-height: 100%;
+  padding: 22px;
+  background: var(--iu-background);
+  color: var(--iu-text);
+  border: 0;
+  border-left: 1px solid var(--iu-border);
+  overflow-y: auto;
+}
+.doc-mobile-dialog::backdrop {
+  background: #0009;
+  backdrop-filter: blur(4px);
+}
+.doc-mobile-dialog .component-nav > a {
+  padding-block: 9px;
+}
+[data-example-island] > [data-live-activate] {
+  margin-bottom: 16px;
+}
+.example-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--iu-secondary);
+}
+.example-field input {
+  width: 100%;
+  border: 1px solid var(--iu-border);
+  border-radius: 7px;
+  background: var(--iu-field);
+  color: var(--iu-text);
+  padding: 11px;
+}
+.example-result {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 9px;
+}
+.example-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.workflow-demo > .iu-image-actions {
+  align-self: center;
+}
+[data-component-island] {
+  position: relative;
+}
+[data-component-island] > .activate-preview {
+  top: 76px;
+  right: 12px;
+}
+.documentation [data-component-island] > .preview-caption {
+  padding-bottom: 18px;
+  border-bottom: 1px dashed var(--iu-border);
+}
+
+.preview-activation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 32px;
+  padding-top: 18px;
+}
+[data-static-root] [inert] .component-tools {
+  visibility: hidden;
+}

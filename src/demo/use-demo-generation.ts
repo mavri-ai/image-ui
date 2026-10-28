@@ -5,6 +5,10 @@ import type { GenerationStatus } from '../components/image-ui/types'
 export function useDemoGeneration(initial: GenerationStatus = 'complete', onComplete?: () => void) {
   const [status, setStatus] = useState<GenerationStatus>(initial)
   const [progress, setProgress] = useState(0)
+  const completion = useRef(onComplete)
+  useEffect(() => {
+    completion.current = onComplete
+  }, [onComplete])
   const timers = useRef<ReturnType<typeof setTimeout>[]>([])
   const clear = useCallback(() => {
     timers.current.forEach(clearTimeout)
@@ -20,7 +24,7 @@ export function useDemoGeneration(initial: GenerationStatus = 'complete', onComp
     },
     [clear],
   )
-  const run = useCallback(() => {
+  function run() {
     clear()
     setStatus('queued')
     setProgress(0)
@@ -30,9 +34,9 @@ export function useDemoGeneration(initial: GenerationStatus = 'complete', onComp
     timers.current.push(
       setTimeout(() => {
         setStatus('complete')
-        onComplete?.()
+        completion.current?.()
       }, 3250),
     )
-  }, [clear, onComplete])
+  }
   return { status, progress, run, chooseStatus, cancel: () => chooseStatus('cancelled') }
 }

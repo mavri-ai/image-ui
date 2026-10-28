@@ -42,6 +42,12 @@ export const catalog = [
     group: 'Explore',
   },
   {
+    id: 'image-actions',
+    title: 'Image actions',
+    description: 'Preview, download, reuse, and create variations.',
+    group: 'Explore',
+  },
+  {
     id: 'generative-canvas',
     title: 'Generative canvas',
     description: 'Connect references, prompts, and generations.',
@@ -50,11 +56,5 @@ export const catalog = [
 ] as const
 
 export type ComponentId = (typeof catalog)[number]['id']
-const sourceLoaders = import.meta.glob<string>('./components/image-ui/*.tsx', {
-  query: '?raw',
-  import: 'default',
-})
 
-export function loadComponentSource(id: ComponentId) {
-  return sourceLoaders[`./components/image-ui/${id}.tsx`]()
-}
+export const showcaseCatalog = catalog.filter((item) => item.id !== 'image-actions')
