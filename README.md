@@ -19,26 +19,16 @@ npm run build  # Typecheck, build the component registry, and build the site
 npm test       # Browser checks using installed Google Chrome
 ```
 
-## Deployment
-
-The public showcase is served at https://mavri.ai/image-ui/ by Mavri's existing
-Cloudflare Worker. Mavri pins this repository to a full commit and archive digest,
-builds it with its own lockfile, and includes the output in the edge release.
-Mavri's staging, promotion, and rollback gates apply to the entire artifact.
-Publishing changes here does not deploy them: update the source pin in Mavri to
-release a newer version.
-
-To build or verify the same path locally:
+## Build for hosting
 
 ```sh
-IMAGE_UI_BASE_PATH=/image-ui/ npm run build
-IMAGE_UI_BASE_PATH=/image-ui/ PORT=5186 npm test
+npm run build
 ```
 
-The build output is `dist/`. Serve it under `/image-ui/`, including `r/` registry
-JSON, images, fonts, and `theme.js`. Keep HTML and registry responses revalidating;
-only content-hashed assets should be immutable. The theme initializer is external
-so the page works with a CSP that disallows inline scripts.
+The static output is `dist/`. To host the showcase at a subpath, build with
+`IMAGE_UI_BASE_PATH` set to that path and serve the generated files at the same
+location. Keep the component registry, images, fonts, and theme initializer
+available alongside the page.
 
 ## Components
 
@@ -87,4 +77,7 @@ The page defaults to dark mode and supports light/dark themes, keyboard interact
 
 ## Images and license
 
-Code is MIT licensed. Demo imagery is selected from the [Mavri content board](https://www.figma.com/board/46LUOG0MdYTkUaCWnmJc9I/Mavri-Content-Static---Video). It is not covered by the code’s MIT license or included in the component registry. See [image credits](public/images/CREDITS.md) for source links.
+Component code is MIT licensed. Demo images are illustrative sample content,
+are not included in the component registry, and are not covered by the code's
+MIT license. Replace them with your own appropriately licensed assets when
+reusing the examples. See [image notes](public/images/CREDITS.md).
