@@ -9,3 +9,7 @@ test-results/
 /public/r/
 /public/registry.json
 /public/LICENSE
+
+/public/images/optimized/
+
+/artifacts/

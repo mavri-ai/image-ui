@@ -1,5 +1,11 @@
-import { expect, test } from '@playwright/test'
+import { type Page, expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+
+async function activate(page: Page, id: string) {
+  const island = page.locator(`[data-component-island="${id}"]`)
+  await island.getByRole('button', { name: 'Try live preview' }).click()
+  await expect(island).toHaveAttribute('data-activated', 'true')
+}
 
 test('renders all demos without errors and supports generation cancellation and retry', async ({
   page,
@@ -9,7 +15,7 @@ test('renders all demos without errors and supports generation cancellation and 
   await page.goto('./')
   await expect(page.locator('.component-section')).toHaveCount(8)
   const section = page.locator('#generation-card')
-  await expect(section.getByRole('progressbar')).toBeVisible()
+  await activate(page, 'generation-card')
   await expect(section.locator('.iu-generation-card').getByRole('status')).toHaveText('Complete', {
     timeout: 6000,
   })
@@ -24,6 +30,7 @@ test('renders all demos without errors and supports generation cancellation and 
     timeout: 6000,
   })
   await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
+  await activate(page, 'generative-canvas')
   await expect(page.locator('.react-flow__node')).toHaveCount(2)
   expect(errors).toEqual([])
 })
@@ -31,6 +38,7 @@ test('renders all demos without errors and supports generation cancellation and 
 test('uploads real references, validates files, and removes them', async ({ page }) => {
   await page.goto('./#reference-input')
   const section = page.locator('#reference-input')
+  await activate(page, 'reference-input')
   await section.getByRole('button', { name: 'Try empty state' }).click()
   await expect(section.getByText('Drop reference images')).toBeVisible()
   const input = section.locator('input[type=file]')
@@ -49,6 +57,7 @@ test('uploads real references, validates files, and removes them', async ({ page
 test('searches models, selects one and returns focus after dismissing', async ({ page }) => {
   await page.goto('./#model-picker')
   const section = page.locator('#model-picker')
+  await activate(page, 'model-picker')
   await section.getByRole('button', { name: 'Popover', exact: true }).click()
   const trigger = section.getByRole('button', { name: 'Select model, GPT Image 2' })
   await trigger.click()
@@ -66,12 +75,14 @@ test('searches models, selects one and returns focus after dismissing', async ({
 test('edits settings and runs a prompt without losing input when cancelled', async ({ page }) => {
   await page.goto('./#generation-settings')
   const settings = page.locator('#generation-settings')
+  await activate(page, 'generation-settings')
   await settings.getByRole('radio', { name: '16:9' }).check()
   await expect(settings.getByRole('radio', { name: '16:9' })).toBeChecked()
   await expect(settings.getByRole('radio', { name: '4:3' })).not.toBeChecked()
   for (let i = 0; i < 3; i++) await settings.getByRole('button', { name: 'More images' }).click()
   await expect(settings.getByRole('button', { name: 'More images' })).toBeDisabled()
   const composer = page.locator('#prompt-composer')
+  await activate(page, 'prompt-composer')
   await composer.getByRole('button', { name: 'Generation settings', exact: true }).click()
   const popover = page.getByRole('dialog', { name: 'Generation settings', exact: true })
   await expect(popover).toBeFocused()
@@ -96,6 +107,7 @@ test('edits settings and runs a prompt without losing input when cancelled', asy
 test('selects outputs, handles partial failure, and changes versions', async ({ page }) => {
   await page.goto('./#output-gallery')
   const gallery = page.locator('#output-gallery')
+  await activate(page, 'output-gallery')
   await gallery.getByRole('button', { name: 'Select Fragrance in motion' }).click()
   await expect(gallery.locator('.iu-field-heading')).toContainText('2 selected')
   await gallery.getByRole('button', { name: 'Mixed results' }).click()
@@ -103,6 +115,7 @@ test('selects outputs, handles partial failure, and changes versions', async ({ 
   await gallery.getByRole('button', { name: 'Retry', exact: true }).click()
   await expect(gallery.getByRole('button', { name: 'Select Pistachio study' })).toBeVisible()
   const history = page.locator('#version-history')
+  await activate(page, 'version-history')
   await history.getByRole('button', { name: 'View Version 03' }).click()
   await expect(history.locator('.iu-history-image img')).toHaveCount(1)
   await expect(history.locator('.iu-history-image img')).toHaveAttribute(
@@ -115,6 +128,7 @@ test('selects outputs, handles partial failure, and changes versions', async ({ 
 test('opens the generation preview and returns focus on dismissal', async ({ page }) => {
   await page.goto('./#generation-card')
   const section = page.locator('#generation-card')
+  await activate(page, 'generation-card')
   await section.getByRole('button', { name: 'Complete', exact: true }).click()
   await section.getByRole('button', { name: 'Expand image' }).click()
   await expect(page.getByRole('dialog')).toBeVisible()
@@ -127,6 +141,7 @@ test('runs a connected canvas with notes, detachable links, and movable nodes', 
 }) => {
   await page.goto('./#generative-canvas')
   const canvas = page.locator('#generative-canvas')
+  await activate(page, 'generative-canvas')
   await expect(canvas.locator('.react-flow__node')).toHaveCount(2)
   await expect(canvas.getByText('No output yet')).toHaveCount(0)
   const generation = canvas.locator('.react-flow__node[data-id="generation"]')
@@ -189,6 +204,7 @@ test('copies source and serves a complete component registry item', async ({
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   await page.goto('./')
   const section = page.locator('#generation-card')
+  await activate(page, 'generation-card')
   await section.getByRole('button', { name: 'Copy Generation card source', exact: true }).click()
   expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
     'export function GenerationCard',
@@ -240,6 +256,7 @@ test('supports mobile navigation, dark theme, reduced motion and no horizontal o
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy()
   await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
+  await activate(page, 'generative-canvas')
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy()
@@ -250,12 +267,23 @@ test('has no automated WCAG A/AA violations in light, dark and mobile layouts', 
 }) => {
   await page.goto('./')
   await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
+  await activate(page, 'generative-canvas')
   await expect(page.locator('.react-flow__node')).toHaveCount(2)
   await expect(page.locator('#generation-card .iu-generation-card')).toHaveAttribute(
     'data-status',
     'complete',
     { timeout: 10000 },
   )
+  for (const id of [
+    'generation-card',
+    'reference-input',
+    'prompt-composer',
+    'model-picker',
+    'generation-settings',
+    'output-gallery',
+    'version-history',
+  ])
+    await activate(page, id)
   for (const theme of ['light', 'dark']) {
     await page.evaluate(async (theme) => {
       document.documentElement.dataset.theme = theme

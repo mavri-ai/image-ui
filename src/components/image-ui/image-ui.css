@@ -1732,3 +1732,19 @@
 .iu-generative-canvas .react-flow__panel.top.left {
   max-width: calc(100% - 110px);
 }
+
+.iu-image-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--iu-surface);
+  border: 1px solid var(--iu-border-strong);
+  border-radius: 999px;
+  box-shadow: var(--iu-shadow);
+}
+.iu-image-actions > .iu-icon-button {
+  width: 31px;
+  height: 28px;
+  border-radius: 50%;
+}

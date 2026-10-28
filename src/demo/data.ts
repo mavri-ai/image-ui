@@ -98,3 +98,5 @@ export const versions: ImageVersion[] = [
 export const composerPrompt =
   'A technical hiking boot on a warm neutral backdrop. Soft studio light, crisp material detail, subtle grounding shadow.'
 export const composerReferences = referenceImages.filter((image) => image.id === 'boot')
+
+export const defaultPrompt = composerPrompt

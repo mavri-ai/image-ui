@@ -1,0 +1,315 @@
+{
+  "components": {
+    "generation-card": [
+      {
+        "name": "status",
+        "type": "GenerationStatus",
+        "required": true
+      },
+      {
+        "name": "src",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": false,
+        "default": "Generated image"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "default": "Untitled generation"
+      },
+      {
+        "name": "model",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "default": "The model took too long to respond. Your prompt and references are safe."
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": false
+      },
+      {
+        "name": "onGenerate",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "onRetry",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "onCancel",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "onOpen",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "loading",
+        "type": "\"eager\" | \"lazy\"",
+        "required": false,
+        "default": "lazy"
+      },
+      {
+        "name": "fetchPriority",
+        "type": "\"high\" | \"low\" | \"auto\"",
+        "required": false,
+        "default": "auto"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "required": false,
+        "default": ""
+      }
+    ],
+    "reference-input": [
+      {
+        "name": "value",
+        "type": "ReferenceImage[]",
+        "required": true
+      },
+      {
+        "name": "onChange",
+        "type": "(images: ReferenceImage[]) => void",
+        "required": true
+      },
+      {
+        "name": "maxFiles",
+        "type": "number",
+        "required": false,
+        "default": "4"
+      },
+      {
+        "name": "maxSizeMB",
+        "type": "number",
+        "required": false,
+        "default": "10"
+      }
+    ],
+    "prompt-composer": [
+      {
+        "name": "value",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "onChange",
+        "type": "(value: string) => void",
+        "required": true
+      },
+      {
+        "name": "onGenerate",
+        "type": "() => void",
+        "required": true
+      },
+      {
+        "name": "onCancel",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "busy",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      },
+      {
+        "name": "models",
+        "type": "ImageModel[]",
+        "required": true
+      },
+      {
+        "name": "model",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "onModelChange",
+        "type": "(id: string) => void",
+        "required": true
+      },
+      {
+        "name": "settings",
+        "type": "GenerationOptions",
+        "required": true
+      },
+      {
+        "name": "onSettingsChange",
+        "type": "(settings: GenerationOptions) => void",
+        "required": true
+      },
+      {
+        "name": "references",
+        "type": "ReferenceImage[]",
+        "required": true
+      },
+      {
+        "name": "onReferencesChange",
+        "type": "(references: ReferenceImage[]) => void",
+        "required": true
+      }
+    ],
+    "model-picker": [
+      {
+        "name": "models",
+        "type": "ImageModel[]",
+        "required": true
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "onChange",
+        "type": "(id: string) => void",
+        "required": true
+      },
+      {
+        "name": "inline",
+        "type": "boolean",
+        "required": false,
+        "default": "false"
+      }
+    ],
+    "generation-settings": [
+      {
+        "name": "value",
+        "type": "GenerationOptions",
+        "required": true
+      },
+      {
+        "name": "onChange",
+        "type": "(value: GenerationOptions) => void",
+        "required": true
+      }
+    ],
+    "output-gallery": [
+      {
+        "name": "items",
+        "type": "GenerationOutput[]",
+        "required": true
+      },
+      {
+        "name": "selected",
+        "type": "string[]",
+        "required": true
+      },
+      {
+        "name": "onSelectionChange",
+        "type": "(ids: string[]) => void",
+        "required": true
+      },
+      {
+        "name": "onRetry",
+        "type": "((id: string) => void)",
+        "required": false
+      }
+    ],
+    "version-history": [
+      {
+        "name": "versions",
+        "type": "ImageVersion[]",
+        "required": true
+      },
+      {
+        "name": "value",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "onChange",
+        "type": "(id: string) => void",
+        "required": true
+      }
+    ],
+    "image-actions": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "onRetry",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "onUseReference",
+        "type": "(() => void)",
+        "required": false
+      },
+      {
+        "name": "fileName",
+        "type": "string",
+        "required": false,
+        "default": "image-ui-output.jpg"
+      }
+    ],
+    "generative-canvas": [
+      {
+        "name": "onAddNode",
+        "type": "AddCanvasNode",
+        "required": false
+      },
+      {
+        "name": "nodes",
+        "type": "CanvasNode[]",
+        "required": false
+      },
+      {
+        "name": "edges",
+        "type": "Edge[]",
+        "required": false
+      },
+      {
+        "name": "onNodesChange",
+        "type": "OnNodesChange<CanvasNode>",
+        "required": false
+      },
+      {
+        "name": "onEdgesChange",
+        "type": "OnEdgesChange<Edge>",
+        "required": false
+      },
+      {
+        "name": "onConnect",
+        "type": "OnConnect",
+        "required": false
+      },
+      {
+        "name": "onGenerate",
+        "type": "((nodeId: string) => void)",
+        "required": false
+      },
+      {
+        "name": "onPromptChange",
+        "type": "((nodeId: string, prompt: string) => void)",
+        "required": false
+      }
+    ]
+  },
+  "sharedTypes": "export type GenerationStatus =\n  'idle' | 'queued' | 'generating' | 'complete' | 'failed' | 'cancelled'\n\nexport interface ReferenceImage {\n  id: string\n  src: string\n  name: string\n}\n\nexport interface ImageModel {\n  id: string\n  name: string\n  provider: string\n  description: string\n  logo?: string\n  monochromeLogo?: boolean\n  mark: string\n  color: string\n}\n\nexport interface GenerationOptions {\n  aspectRatio: '1:1' | '4:3' | '3:4' | '16:9'\n  quality: 'standard' | 'high'\n  count: number\n}\n\nexport interface GenerationOutput {\n  id: string\n  status: 'complete' | 'generating' | 'failed'\n  src?: string\n  alt: string\n  error?: string\n}\n\nexport interface ImageVersion {\n  id: string\n  src: string\n  prompt: string\n  model: string\n  settings: GenerationOptions\n  label: string\n  createdAt: string\n}\n",
+  "canvasNode": "export type CanvasNode = Node<\n  {\n    kind: 'reference' | 'generation' | 'output' | 'note'\n    title: string\n    src?: string\n    prompt?: string\n    status?: GenerationStatus\n    model?: string\n  },\n  'imageUi'\n>"
+}
