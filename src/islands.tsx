@@ -1,4 +1,4 @@
-import { StrictMode, type ComponentType } from 'react'
+import { StrictMode, useEffect, type ReactNode, type ComponentType } from 'react'
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { flushSync } from 'react-dom'
 import { MotionConfig } from 'motion/react'
@@ -7,6 +7,11 @@ import { siteOrigin } from './site'
 
 const components = import.meta.glob<{ default: ComponentType }>('./demo/previews/*.tsx')
 const examples = import.meta.glob<{ default: ComponentType }>('./examples/*.tsx')
+function IslandReady({ children, onReady }: { children: ReactNode; onReady: () => void }) {
+  useEffect(onReady, [onReady])
+  return children
+}
+
 export async function mountIsland(element: HTMLElement) {
   const id = element.dataset.componentIsland as ComponentId | undefined
   const example = element.dataset.exampleIsland
@@ -39,10 +44,15 @@ export async function mountIsland(element: HTMLElement) {
     const wrapper = staticRoot.parentElement!
     wrapper.removeAttribute('role')
     wrapper.removeAttribute('aria-label')
+    // Keep controls inert until React has attached handlers, so early input cannot be reset.
+    wrapper.setAttribute('inert', '')
     staticRoot.querySelector('[inert]')?.removeAttribute('inert')
-    flushSync(() => {
-      hydrateRoot(staticRoot, content, { identifierPrefix: element.dataset.prefix })
+    await new Promise<void>((resolve) => {
+      hydrateRoot(staticRoot, <IslandReady onReady={resolve}>{content}</IslandReady>, {
+        identifierPrefix: element.dataset.prefix,
+      })
     })
+    wrapper.removeAttribute('inert')
     const button = element.querySelector<HTMLButtonElement>('[data-live-activate]')
     if (button && element.dataset.documentation === 'true') {
       button.textContent = 'Live preview'

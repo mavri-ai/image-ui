@@ -1,10 +1,9 @@
 import { useEffect, useState, type ComponentType } from 'react'
 import { Dialog } from 'radix-ui'
-import { Check, Code2, Copy, Terminal, X, ArrowUpRight } from 'lucide-react'
+import { Check, Code2, Copy, Terminal, X } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { catalog } from './catalog'
 import { loadComponentSource } from './source'
-import { publicPath } from './paths'
 import { installCommand } from './routes'
 import { CopyButton } from './components/arc/copy-button'
 import { IconButton } from './components/image-ui/primitives'
@@ -150,14 +149,6 @@ export function ComponentSection({
           ) : null}
         </AnimatePresence>
       </div>
-      {!documentation ? (
-        <div className="component-doc-link">
-          <a href={publicPath(`/components/${item.id}`)}>
-            Documentation <ArrowUpRight size={12} />
-          </a>
-          <span>Usage, API &amp; examples</span>
-        </div>
-      ) : null}
       {copyError ? (
         <p role="alert" className="copy-error">
           Clipboard unavailable. Select and copy the code directly.

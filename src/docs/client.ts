@@ -3,6 +3,9 @@ const origin = window.location.origin
 const themeButtons = document.querySelectorAll<HTMLButtonElement>('.theme-control button')
 function syncTheme(theme: string) {
   document.documentElement.dataset.theme = theme
+  document.querySelectorAll<HTMLElement>('.theme-control-selection').forEach((selection) => {
+    selection.style.transform = `translateX(${theme === 'dark' ? 27 : 0}px)`
+  })
   themeButtons.forEach((button) =>
     button.setAttribute(
       'aria-pressed',
@@ -104,7 +107,7 @@ async function activate(element: HTMLElement) {
   if (pending.has(element) || element.dataset.activated) return
   pending.add(element)
   element.setAttribute('aria-busy', 'true')
-  const button = element.querySelector<HTMLButtonElement>('[data-live-activate]')
+  let button = element.querySelector<HTMLButtonElement>('[data-live-activate]')
   const focusPreview = button === document.activeElement
   if (button) {
     button.disabled = true
@@ -126,18 +129,25 @@ async function activate(element: HTMLElement) {
   } catch {
     pending.delete(element)
     element.removeAttribute('aria-busy')
-    if (button) {
-      button.hidden = false
-      button.disabled = false
-      button.textContent = 'Retry live preview'
+    if (!button) {
+      button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'doc-button activate-preview'
+      button.addEventListener('click', () => void activate(element))
+      element.append(button)
     }
+    button.hidden = false
+    button.disabled = false
+    button.textContent = 'Retry live preview'
   }
 }
 for (const element of document.querySelectorAll<HTMLElement>(
   '[data-component-island], [data-example-island]',
 )) {
   const button = element.querySelector<HTMLButtonElement>('[data-live-activate]')
-  if (button) {
+  if (element.dataset.mode === 'auto') {
+    void activate(element)
+  } else if (button) {
     button.hidden = false
     button.addEventListener('click', () => void activate(element))
     if (button.classList.contains('activate-preview')) {
@@ -152,25 +162,29 @@ for (const element of document.querySelectorAll<HTMLElement>(
   }
 }
 if (routePath(window.location.pathname) === '/') {
-  const navigation = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries)
-        if (entry.isIntersecting) {
-          document
-            .querySelectorAll<HTMLAnchorElement>('.component-nav a[href^="#"]')
-            .forEach((link) => {
-              const active = link.hash === `#${entry.target.id}`
-              link.classList.toggle('is-active', active)
-              if (active) link.setAttribute('aria-current', 'location')
-              else link.removeAttribute('aria-current')
-            })
-        }
-    },
-    { rootMargin: '-12% 0px -65% 0px' },
-  )
-  document.querySelectorAll('.component-section').forEach((section) => navigation.observe(section))
-  document.addEventListener('image-ui-preview-ready', (event) => {
-    const section = (event.target as HTMLElement).querySelector('.component-section')
-    if (section) navigation.observe(section)
-  })
+  let frame = 0
+  function updateActive() {
+    frame = 0
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('.component-section'))
+    let current = sections[0]
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= innerHeight * 0.25) current = section
+      else break
+    }
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2)
+      current = sections.at(-1)!
+    document.querySelectorAll<HTMLAnchorElement>('.component-nav a[href^="#"]').forEach((link) => {
+      const active = link.hash === `#${current?.id}`
+      link.classList.toggle('is-active', active)
+      if (active) link.setAttribute('aria-current', 'location')
+      else link.removeAttribute('aria-current')
+    })
+  }
+  function scheduleUpdate() {
+    if (!frame) frame = requestAnimationFrame(updateActive)
+  }
+  window.addEventListener('scroll', scheduleUpdate, { passive: true })
+  window.addEventListener('resize', scheduleUpdate)
+  document.addEventListener('image-ui-preview-ready', scheduleUpdate)
+  updateActive()
 }

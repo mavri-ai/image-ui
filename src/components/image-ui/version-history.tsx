@@ -88,23 +88,25 @@ export function VersionHistory({ versions, value, onChange }: VersionHistoryProp
         transition={{ duration: reducedMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
       >
         <div ref={detailsRef} className="iu-history-details-content">
-          <motion.div
-            key={selected.id}
-            initial={reducedMotion ? false : { opacity: 0, y: 4, filter: 'blur(2px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: reducedMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p>{selected.prompt}</p>
-            <span>
-              {selected.model}
-              <i />
-              {selected.settings.aspectRatio}
-              <i />
-              {selected.settings.quality}
-              <i />
-              {selected.createdAt}
-            </span>
-          </motion.div>
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={selected.id}
+              initial={reducedMotion ? false : { opacity: 0, y: 4, filter: 'blur(2px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: reducedMotion ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p>{selected.prompt}</p>
+              <span>
+                {selected.model}
+                <i />
+                {selected.settings.aspectRatio}
+                <i />
+                {selected.settings.quality}
+                <i />
+                {selected.createdAt}
+              </span>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </motion.div>
     </div>

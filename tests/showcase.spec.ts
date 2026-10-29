@@ -3,8 +3,59 @@ import AxeBuilder from '@axe-core/playwright'
 
 async function activate(page: Page, id: string) {
   const island = page.locator(`[data-component-island="${id}"]`)
-  await island.getByRole('button', { name: 'Try live preview' }).click()
   await expect(island).toHaveAttribute('data-activated', 'true')
+}
+
+for (const theme of ['light', 'dark'] as const) {
+  test(`generation placeholders follow the ${theme} theme`, async ({ page }) => {
+    await page.goto('./')
+    await page
+      .getByRole('button', { name: `Switch to ${theme} theme` })
+      .first()
+      .click()
+    await activate(page, 'generation-card')
+    await activate(page, 'output-gallery')
+    await page
+      .locator('#generation-card')
+      .getByRole('button', { name: 'Generating', exact: true })
+      .click()
+    await page.locator('#output-gallery').getByRole('button', { name: 'Mixed results' }).click()
+
+    const fields = page.locator('.iu-generation-field')
+    await expect(fields).toHaveCount(2)
+    for (const field of await fields.all()) {
+      // Check the rendered surface, rather than only the selected theme attribute.
+      const brightness = await field.evaluate((element) => {
+        const rgb = getComputedStyle(element).backgroundColor.match(/\d+/g)!.map(Number)
+        return (rgb[0] + rgb[1] + rgb[2]) / (3 * 255)
+      })
+      if (theme === 'light') expect(brightness).toBeGreaterThan(0.9)
+      else expect(brightness).toBeLessThan(0.15)
+      await expect(field.locator('.iu-drive-matrix > span')).toHaveCount(432)
+    }
+    const results = await new AxeBuilder({ page })
+      .include('#generation-card')
+      .include('#output-gallery')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+      .analyze()
+    expect(results.violations).toEqual([])
+
+    // An embedded light preview must also work inside a dark application.
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'dark'
+      document.querySelector<HTMLElement>('#generation-card')!.dataset.theme = 'light'
+    })
+    await expect(page.locator('#generation-card .iu-generation-field')).toHaveCSS(
+      'color-scheme',
+      'light',
+    )
+    await expect(page.locator('#generation-card .iu-generation-field')).not.toHaveCSS(
+      'background-color',
+      await page
+        .locator('#output-gallery .iu-generation-field')
+        .evaluate((element) => getComputedStyle(element).backgroundColor),
+    )
+  })
 }
 
 test('renders all demos without errors and supports generation cancellation and retry', async ({
@@ -29,8 +80,8 @@ test('renders all demos without errors and supports generation cancellation and 
   await expect(section.locator('.iu-generation-card').getByRole('status')).toHaveText('Complete', {
     timeout: 6000,
   })
-  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   await activate(page, 'generative-canvas')
+  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   await expect(page.locator('.react-flow__node')).toHaveCount(2)
   expect(errors).toEqual([])
 })
@@ -255,8 +306,8 @@ test('supports mobile navigation, dark theme, reduced motion and no horizontal o
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy()
-  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   await activate(page, 'generative-canvas')
+  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
   ).toBeTruthy()
@@ -266,8 +317,8 @@ test('has no automated WCAG A/AA violations in light, dark and mobile layouts', 
   page,
 }) => {
   await page.goto('./')
-  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   await activate(page, 'generative-canvas')
+  await page.locator('#generative-canvas').scrollIntoViewIfNeeded()
   await expect(page.locator('.react-flow__node')).toHaveCount(2)
   await expect(page.locator('#generation-card .iu-generation-card')).toHaveAttribute(
     'data-status',
@@ -305,4 +356,35 @@ test('has no automated WCAG A/AA violations in light, dark and mobile layouts', 
     .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
     .analyze()
   expect(mobile.violations, 'mobile dark layout').toEqual([])
+})
+
+test('preserves showcase navigation and scrolls smoothly between live components', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await activate(page, 'generative-canvas')
+  await expect(page.locator('.sidebar .component-nav a')).toHaveCount(8)
+  await expect(page.locator('.sidebar-byline svg')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Try live preview' })).toHaveCount(0)
+  await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'smooth')
+  await page.evaluate(() => {
+    const samples: number[] = []
+    ;(window as Window & { scrollSamples?: number[] }).scrollSamples = samples
+    window.addEventListener('scroll', () => samples.push(scrollY), { passive: true })
+  })
+  const link = page.locator('.sidebar a[href="#output-gallery"]')
+  await link.click()
+  await expect(link).toHaveAttribute('aria-current', 'location')
+  expect(
+    await page.evaluate(() => {
+      const samples = (window as Window & { scrollSamples?: number[] }).scrollSamples ?? []
+      return samples.some((y) => y > 0 && y < scrollY - 10)
+    }),
+  ).toBeTruthy()
+  await page.locator('.sidebar a[href="#generative-canvas"]').click()
+  await expect(page.locator('.sidebar a[href="#generative-canvas"]')).toHaveAttribute(
+    'aria-current',
+    'location',
+  )
+  await expect(page.locator('.react-flow__node')).toHaveCount(2)
 })
