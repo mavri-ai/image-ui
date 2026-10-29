@@ -1,7 +1,6 @@
 import { StrictMode, type ComponentType } from 'react'
 import { renderToString } from 'react-dom/server'
 import { MotionConfig } from 'motion/react'
-import { ArrowRight } from 'lucide-react'
 import { catalog, type ComponentId } from '../catalog'
 import { ComponentSection } from '../component-section'
 import { publicPath } from '../paths'
@@ -41,22 +40,11 @@ export function StaticComponentSection({
   return (
     <div
       data-component-island={id}
-      data-mode="manual"
+      data-mode="auto"
       data-index={index}
       data-documentation={documentation}
       data-prefix={prefix}
     >
-      {documentation ? (
-        <div className="preview-activation">
-          <button type="button" className="doc-button" data-live-activate hidden>
-            Try live preview
-          </button>
-        </div>
-      ) : (
-        <button type="button" className="doc-button activate-preview" data-live-activate hidden>
-          Try live preview
-        </button>
-      )}
       {html ? (
         <div data-hydrate-root>
           <div
@@ -80,21 +68,11 @@ export function StaticComponentSection({
             <div className="component-preview component-preview--canvas">
               <StaticCanvas />
             </div>
-            {!documentation ? (
-              <div className="component-doc-link">
-                <a href={`/components/${id}`}>
-                  Documentation <ArrowRight size={12} />
-                </a>
-                <span>Usage, API &amp; examples</span>
-              </div>
-            ) : null}
           </section>
         </div>
       )}
       {documentation ? (
-        <p className="preview-caption">
-          Static preview. Try the live component to interact with it.
-        </p>
+        <p className="preview-caption">Live preview. Generation is simulated locally.</p>
       ) : null}
     </div>
   )

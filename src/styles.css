@@ -669,6 +669,7 @@ main {
   background: var(--iu-surface);
   box-shadow: var(--iu-button-shadow);
   pointer-events: none;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .code-dialog-overlay {
@@ -760,11 +761,11 @@ main {
 }
 
 /* Documentation shares the showcase palette and compact component language. */
-.sidebar {
+.site-frame--docs .sidebar {
   overflow-y: auto;
   padding-top: 42px;
 }
-.sidebar h1,
+.site-frame--docs .sidebar h1,
 .sidebar-tagline {
   font-size: 21px;
   line-height: 1.4;
@@ -777,10 +778,10 @@ main {
 .nav-doc-label {
   margin-top: 22px;
 }
-.sidebar-bottom {
+.site-frame--docs .sidebar-bottom {
   padding-top: 30px;
 }
-.component-nav > a {
+.site-frame--docs .component-nav > a {
   padding-block: 5px;
 }
 .showcase-intro {

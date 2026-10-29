@@ -1,4 +1,5 @@
-:root {
+:root,
+[data-theme='light'] {
   --iu-font: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --iu-mono: 'Geist Mono Variable', ui-monospace, monospace;
   --iu-background: #fafafa;
@@ -25,6 +26,10 @@
   --iu-on-brand: #ffffff;
   --iu-danger: #ac5d54;
   --iu-dot: #ceced3;
+  --iu-generation-background: #f1f1f3;
+  --iu-generation-block: #62646b;
+  --iu-generation-progress: #62646b;
+  --iu-generation-label: #62646b;
   --iu-shadow: 0 1px 2px #00000005, 0 2px 7px #00000006;
   --iu-button-shadow: 0 0 0 1px #00000009, 0 1px 2px #0000000a;
   color-scheme: light;
@@ -54,6 +59,10 @@
   --iu-on-brand: #111111;
   --iu-danger: #d6958c;
   --iu-dot: #303030;
+  --iu-generation-background: #161616;
+  --iu-generation-block: #dadada;
+  --iu-generation-progress: #c7c7c7;
+  --iu-generation-label: #b7b6b3;
   --iu-shadow: 0 1px 2px #0002, 0 2px 6px #0002;
   --iu-button-shadow: 0 0 0 1px #ffffff14, 0 1px 2px #0005;
   color-scheme: dark;
@@ -350,7 +359,7 @@
   inset: 0;
   overflow: hidden;
   isolation: isolate;
-  background: #161616;
+  background: var(--iu-generation-background);
 }
 .iu-drive-matrix {
   position: absolute;
@@ -368,7 +377,7 @@
   border-radius: 2px;
 }
 .iu-drive-loading > span {
-  background: #dadada;
+  background: var(--iu-generation-block);
   opacity: 0.025;
   animation: iu-drive-shimmer 3.2s ease-in-out infinite both;
 }
@@ -414,7 +423,7 @@
   display: block;
   height: 100%;
   width: 100%;
-  background: #c7c7c7;
+  background: var(--iu-generation-progress);
   transform-origin: left;
 }
 .iu-reference-input {
@@ -1559,7 +1568,7 @@
   position: absolute;
   bottom: 8px;
   left: 8px;
-  color: #b7b6b3;
+  color: var(--iu-generation-label);
   font: 9px var(--iu-font);
 }
 

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { ArrowUpRight, Menu, Moon, Sun } from 'lucide-react'
 import { catalog, showcaseCatalog } from './catalog'
-import { findPage, homeDescription, supportPages } from './routes'
+import { findPage, supportPages } from './routes'
 import { StaticComponentSection } from './demo/static-preview'
 import { IconButton } from './components/image-ui/primitives'
 
@@ -57,9 +57,11 @@ export default function App({ path = '/', content }: { path?: string; content?: 
     <nav className="component-nav" aria-label="Components">
       <div className="nav-group-label">Components</div>
       {!home ? <a href="/">Showcase</a> : null}
-      <a href="/components" aria-current={indexPage ? 'page' : undefined}>
-        All components
-      </a>
+      {!home ? (
+        <a href="/components" aria-current={indexPage ? 'page' : undefined}>
+          All components
+        </a>
+      ) : null}
       {(home ? showcaseCatalog : catalog).map((item) => (
         <a
           key={item.id}
@@ -76,21 +78,25 @@ export default function App({ path = '/', content }: { path?: string; content?: 
           {item.title}
         </a>
       ))}
-      <div className="nav-group-label nav-doc-label">Documentation</div>
-      {supportPages.map((doc) => (
-        <a
-          key={doc.path}
-          href={doc.path}
-          aria-current={path === doc.path ? 'page' : undefined}
-          className={path === doc.path ? 'is-active' : ''}
-        >
-          {doc.path === '/guides/image-generation-workflow' ? 'Complete workflow' : doc.title}
-        </a>
-      ))}
+      <div className="nav-group-label nav-doc-label" hidden={home}>
+        Documentation
+      </div>
+      {!home &&
+        supportPages.map((doc) => (
+          <a
+            key={doc.path}
+            href={doc.path}
+            aria-current={path === doc.path ? 'page' : undefined}
+            className={path === doc.path ? 'is-active' : ''}
+          >
+            {doc.path === '/guides/image-generation-workflow' ? 'Complete workflow' : doc.title}
+          </a>
+        ))}
     </nav>
   )
   const themeControl = (
     <div className="theme-control" role="group" aria-label="Color theme">
+      <span className="theme-control-selection" aria-hidden="true" />
       <IconButton label="Switch to light theme" aria-pressed={false}>
         <Sun size={13} />
       </IconButton>
@@ -127,30 +133,26 @@ export default function App({ path = '/', content }: { path?: string; content?: 
             {navigation}
           </div>
           <div className="sidebar-bottom">
-            <a
-              className="sidebar-byline"
-              href="https://github.com/mavri-ai"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Made by <strong>Mavri</strong>
-              <ArrowUpRight size={13} />
-            </a>
-            <p>
-              React components for
-              <br />
-              visual generation interfaces.
-            </p>
-            <a
-              className="source-link"
-              href="https://github.com/mavri-ai/image-ui"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Github size={13} />
-              Source code
-              <ArrowUpRight size={11} />
-            </a>
+            <div className="sidebar-footer-links">
+              <a
+                className="sidebar-byline"
+                href="https://mavri.ai"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Made by <strong>Mavri</strong>
+              </a>
+              <a
+                className="source-link"
+                href="https://github.com/mavri-ai/image-ui"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="View source code on GitHub"
+              >
+                <Github size={13} />
+                Source
+              </a>
+            </div>
             <div className="sidebar-meta">
               <span>v0.1</span>
               <a href="/LICENSE" target="_blank" rel="noreferrer">
@@ -173,17 +175,6 @@ export default function App({ path = '/', content }: { path?: string; content?: 
         <main id="main">
           {home ? (
             <>
-              <div className="showcase-intro">
-                <p>{homeDescription}</p>
-                <div>
-                  <a href="/docs/installation">
-                    Get started <ArrowUpRight size={12} />
-                  </a>
-                  <a href="/docs/agents">
-                    Use with coding agents <ArrowUpRight size={12} />
-                  </a>
-                </div>
-              </div>
               {showcaseCatalog.map((item, index) => (
                 <StaticComponentSection key={item.id} id={item.id} index={index} />
               ))}
@@ -202,22 +193,24 @@ export default function App({ path = '/', content }: { path?: string; content?: 
               </article>
             ))
           )}
-          <footer className="page-footer">
-            <span>Image UI · Mavri</span>
-            <a href="/llms.txt">llms.txt</a>
-            <a href="/llms-full.txt">Full documentation</a>
-            <a href="https://github.com/mavri-ai/image-ui" target="_blank" rel="noreferrer">
-              GitHub
-              <ArrowUpRight size={12} />
-            </a>
-            <p>
-              Interactive demos. Generation is simulated. Photography from{' '}
-              <a href="https://unsplash.com" target="_blank" rel="noreferrer">
-                Unsplash
+          {!home ? (
+            <footer className="page-footer">
+              <span>Image UI · Mavri</span>
+              <a href="/llms.txt">llms.txt</a>
+              <a href="/llms-full.txt">Full documentation</a>
+              <a href="https://github.com/mavri-ai/image-ui" target="_blank" rel="noreferrer">
+                GitHub
+                <ArrowUpRight size={12} />
               </a>
-              .
-            </p>
-          </footer>
+              <p>
+                Interactive demos. Generation is simulated. Photography from{' '}
+                <a href="https://unsplash.com" target="_blank" rel="noreferrer">
+                  Unsplash
+                </a>
+                .
+              </p>
+            </footer>
+          ) : null}
         </main>
       </div>
     </>

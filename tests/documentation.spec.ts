@@ -31,8 +31,8 @@ test('all component pages ship complete HTML, unique metadata, and matching Mark
 test('documentation and navigation remain usable without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false })
   const page = await context.newPage()
-  await page.goto('./')
-  await page.locator('#prompt-composer').getByRole('link', { name: 'Documentation' }).click()
+  await page.goto('./components')
+  await page.getByRole('link', { name: /Prompt composer References/ }).click()
   await expect(
     page.getByRole('heading', { name: 'Prompt composer', exact: true, level: 1 }),
   ).toBeVisible()
@@ -174,23 +174,15 @@ test('documentation is accessible in both themes and mobile navigation works', a
   expect(result.violations, 'mobile workflow').toEqual([])
 })
 
-test('docs ship a real static preview and load only the requested demo on activation', async ({
-  page,
-}) => {
-  const scripts: string[] = []
-  page.on('request', (request) => {
-    if (request.resourceType() === 'script') scripts.push(request.url())
-  })
-  await page.goto('./components/prompt-composer', { waitUntil: 'networkidle' })
-  await expect(page.locator('[data-component-island] [inert] .iu-composer')).toBeVisible()
-  expect(scripts.some((url) => /islands|react-|component-section/.test(url))).toBeFalsy()
-  await page.getByRole('button', { name: 'Try live preview' }).click()
-  await expect(page.getByRole('textbox', { name: 'Image prompt' })).toBeEditable()
-  await expect(page.getByRole('textbox', { name: 'Image prompt' })).toBeFocused()
-  expect(scripts.some((url) => url.includes('islands'))).toBeTruthy()
-  expect(
-    scripts.some((url) => /output-gallery|version-history|generative-canvas/.test(url)),
-  ).toBeFalsy()
+test('component previews work immediately without an activation gate', async ({ page }) => {
+  await page.goto('./components/prompt-composer')
+  await expect(page.getByRole('button', { name: 'Try live preview' })).toHaveCount(0)
+  const input = page.getByRole('textbox', { name: 'Image prompt' })
+  await input.click()
+  await expect(input).toBeFocused()
+  await input.fill('A quiet room in morning light')
+  await expect(input).toHaveValue('A quiet room in morning light')
+  await expect(page.locator('[data-component-island]')).toHaveAttribute('data-activated', 'true')
 })
 
 test('retries only failed outputs and preserves selection', async ({ page }) => {
